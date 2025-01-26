@@ -1,21 +1,12 @@
-@use "sass:meta";
+@use 'sass:meta';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @include meta.load-css('variables.scss');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  height: 100%;
-}
+@include meta.load-css('reset.scss');
 
 body {
+  @apply min-h-[100vh];
   @apply bg-[black];
   @apply text-lavender-web font-[ubuntu];
 }

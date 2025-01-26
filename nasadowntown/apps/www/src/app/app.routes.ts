@@ -12,4 +12,12 @@ export const appRoutes: Route[] = [
     title: 'Nasa Downtown',
     component: HomePageComponent,
   },
+  {
+    path: 'mars',
+    title: 'Mars',
+    loadComponent: () =>
+      import('./pages/mars-page/mars-page.component').then(
+        (m) => m.MarsPageComponent
+      ),
+  },
 ];
