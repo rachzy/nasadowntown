@@ -1,28 +1,28 @@
 {
-  "name": "nasadowntown",
+  "name": "www",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "app",
-  "sourceRoot": "apps/nasadowntown/src",
+  "prefix": "nd",
+  "sourceRoot": "apps/www/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/nasadowntown",
-        "index": "apps/nasadowntown/src/index.html",
-        "browser": "apps/nasadowntown/src/main.ts",
+        "outputPath": "dist/apps/www",
+        "index": "apps/www/src/index.html",
+        "browser": "apps/www/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/nasadowntown/tsconfig.app.json",
+        "tsConfig": "apps/www/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/nasadowntown/public"
+            "input": "apps/www/public"
           }
         ],
-        "styles": ["apps/nasadowntown/src/styles.scss"],
+        "styles": ["apps/www/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -53,10 +53,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "nasadowntown:build:production"
+          "buildTarget": "www:build:production"
         },
         "development": {
-          "buildTarget": "nasadowntown:build:development"
+          "buildTarget": "www:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -64,7 +64,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "nasadowntown:build"
+        "buildTarget": "www:build"
       }
     },
     "lint": {
@@ -74,14 +74,14 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/nasadowntown/jest.config.ts"
+        "jestConfig": "apps/www/jest.config.ts"
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "nasadowntown:build",
-        "staticFilePath": "dist/apps/nasadowntown/browser",
+        "buildTarget": "www:build",
+        "staticFilePath": "dist/apps/www/browser",
         "spa": true
       }
     }

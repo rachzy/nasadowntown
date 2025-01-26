@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Smooch+Sans:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+:root {
+  --color-black: hsla(0, 0%, 1%, 1) /*#020202ff */;
+  --color-lavender-web: hsla(240, 100%, 97%, 1) /* #eeeeffff */;
+  --color-jet: hsla(240, 1%, 23%, 0.7) /* #020202ff */;
+
+  --font-smooch: Smooch Sans, serif;
+  --font-ubuntu: 'Ubuntu', sans-serif;
+}
+
+/* SCSS Gradient */
+$gradient-top: linear-gradient(0deg, #020202ff, #eeeeffff);
+$gradient-right: linear-gradient(90deg, #020202ff, #eeeeffff);
+$gradient-bottom: linear-gradient(180deg, #020202ff, #eeeeffff);
+$gradient-left: linear-gradient(270deg, #020202ff, #eeeeffff);
+$gradient-top-right: linear-gradient(45deg, #020202ff, #eeeeffff);
+$gradient-bottom-right: linear-gradient(135deg, #020202ff, #eeeeffff);
+$gradient-top-left: linear-gradient(225deg, #020202ff, #eeeeffff);
+$gradient-bottom-left: linear-gradient(315deg, #020202ff, #eeeeffff);
+$gradient-radial: radial-gradient(#020202ff, #eeeeffff);

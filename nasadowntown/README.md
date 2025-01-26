@@ -8,7 +8,7 @@
 
 ## Finish your CI setup
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/uNHV0swBWN)
+[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/GuxA4E134y)
 
 
 ## Run tasks
@@ -16,19 +16,19 @@
 To run the dev server for your app, use:
 
 ```sh
-npx nx serve nasadowntown
+npx nx serve www
 ```
 
 To create a production bundle:
 
 ```sh
-npx nx build nasadowntown
+npx nx build www
 ```
 
 To see all available targets to run for a project, run:
 
 ```sh
-npx nx show project nasadowntown
+npx nx show project www
 ```
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.

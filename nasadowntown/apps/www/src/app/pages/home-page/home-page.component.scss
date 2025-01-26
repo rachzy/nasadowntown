@@ -1,0 +1,44 @@
+:host {
+  @apply flex flex-col justify-center items-center;
+  @apply w-full h-full p-4;
+}
+
+.subtitle {
+  @apply text-2xl text-center uppercase tracking-widest;
+  @apply font-ubuntu font-extralight;
+}
+
+.title {
+  @apply my-3;
+  @apply text-9xl text-center;
+  @apply font-smooch font-light;
+
+  b {
+    @apply font-bold;
+  }
+}
+
+.caption {
+  @apply mt-8;
+  @apply text-xl text-center font-thin;
+}
+
+.buttons-container {
+  @apply flex flex-row justify-center items-center;
+  @apply w-full;
+  @apply mt-8;
+
+  button {
+    @apply bg-lavender-web;
+    @apply px-4 py-1;
+    @apply rounded-lg;
+    @apply text-black capitalize;
+    @apply tracking-widest;
+
+    @apply transition-all duration-300;
+
+    &:hover {
+      @apply transform scale-105;
+    }
+  }
+}

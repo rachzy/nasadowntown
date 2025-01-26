@@ -1,8 +1,8 @@
 export default {
-  displayName: 'nasadowntown',
+  displayName: 'www',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/apps/nasadowntown',
+  coverageDirectory: '../../coverage/apps/www',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

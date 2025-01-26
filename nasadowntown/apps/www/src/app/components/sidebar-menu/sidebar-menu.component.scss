@@ -1,0 +1,63 @@
+.menu-button {
+  @apply m-2 fixed;
+  @apply z-20;
+}
+
+.menu-container {
+  @apply fixed;
+  @apply flex flex-col;
+  @apply w-0 h-full overflow-hidden;
+  @apply bg-jet;
+  @apply duration-500 ease-in-out;
+
+  &.active {
+    @apply w-[350px] max-w-[100vw];
+    @apply px-4 py-16;
+  }
+
+  .title {
+    @apply font-smooch text-start text-6xl text-nowrap;
+  }
+
+  .navbar-menu {
+    @apply flex flex-col;
+    @apply mt-8;
+
+    li {
+      @apply text-lg;
+      @apply font-thin;
+
+      a {
+        &.active {
+          @apply font-semibold;
+        }
+
+        a:hover {
+          @apply underline;
+        }
+      }
+    }
+  }
+
+  .buttons-container {
+    @apply flex gap-3 mt-auto;
+
+    button {
+      @apply border-lavender-web border-[0.5px] border-solid rounded-md;
+      @apply px-2 py-1;
+      @apply transition-all duration-300;
+
+      .button-icon {
+        @apply text-4xl;
+      }
+
+      &:hover {
+        @apply bg-lavender-web;
+
+        .button-icon {
+          @apply text-black;
+        }
+      }
+    }
+  }
+}
