@@ -1,12 +1,17 @@
 <h1 class="title">Planet <b>Mars</b></h1>
 
 <div class="photos-container">
-  @if (isLoaded$ | async) { @for (photo of marsPhotos$ | async; track photo) {
-  <div class="photo">
-    <img [src]="photo.img_src" alt="Mars photo" />
-    <p>{{ photo.earth_date }}</p>
+  <div class="mosaic">
+    <ng-container *ngIf="isLoaded$ | async; else loading">
+      <ng-container *ngFor="let photo of marsPhotos$ | async; trackBy: trackByPhotoId">
+        <div class="photo">
+          <img [src]="photo.img_src" alt="Mars photo" />
+          <p>{{ photo.earth_date }}</p>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #loading>
+      <nd-spinner></nd-spinner>
+    </ng-template>
   </div>
-  } } @else {
-  <nd-spinner></nd-spinner>
-  }
 </div>
