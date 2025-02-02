@@ -1,5 +1,6 @@
-export type NasaAPIMarsRover = 'curiosity' | 'opportunity' | 'spirit';
-export type NasaAPIMarsRoverCamera =
+export type MarsRover = 'curiosity' | 'opportunity' | 'spirit';
+type MarsRoverCapitalized = 'Curiosity' | 'Opportunity' | 'Spirit';
+export type MarsRoverCamera =
   | 'FHAZ'
   | 'RHAZ'
   | 'MAST'
@@ -19,15 +20,31 @@ interface Camera {
 
 interface RoverMetadata {
   id: number;
-  name: NasaAPIMarsRover;
+  name: MarsRover;
   landing_date: string;
   launch_date: string;
   status: string;
 }
 
+export interface RoverPhotosMetadata {
+  name: MarsRoverCapitalized;
+  landing_date: string;
+  launch_date: string;
+  status: string;
+  max_sol: number;
+  max_date: string;
+  total_photos: number;
+  photos: {
+    sol: number;
+    earth_date: string;
+    total_photos: number;
+    cameras: string[];
+  }[];
+}
+
 interface NasaAPIMarsPhotosBaseRequest {
-  rover: NasaAPIMarsRover;
-  camera?: NasaAPIMarsRoverCamera;
+  rover: MarsRover;
+  camera?: MarsRoverCamera;
   sol?: number;
   page?: number;
   earthDate?: Date;
@@ -64,19 +81,5 @@ export interface NasaAPIMarsPhotosResponse {
 }
 
 export interface NasaAPIMarsManifestResponse {
-  photo_manifest: {
-    name: string;
-    landing_date: string;
-    launch_date: string;
-    status: string;
-    max_sol: number;
-    max_date: string;
-    total_photos: number;
-    photos: {
-      sol: number;
-      earth_date: string;
-      total_photos: number;
-      cameras: string[];
-    }[];
-  };
+  photo_manifest: RoverPhotosMetadata;
 }

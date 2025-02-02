@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { NASA_MARS_ROUTE } from './api.routes';
 import { nasaAPIRequestBuilder } from '../utils/nasa-api';
 import {
-  NasaAPIMarsRover,
+  MarsRover,
   NasaAPIMarsManifestResponse,
   NasaAPIMarsPhotosRequest,
   NasaAPIMarsPhotosResponse,
@@ -20,22 +20,22 @@ export class NasaService {
   public getMarsPhotos(
     data: NasaAPIMarsPhotosRequest
   ): Observable<NasaAPIMarsPhotosResponse | null> {
-    const { rover, camera, page, earthDate } = data;
+    const { rover, earthDate } = data;
     const earth_date = earthDate
       ? `earth_date=${format(earthDate, 'yyyy-MM-dd')}`
       : '';
-    const sol = data.sol ? `sol=${data.sol}` : '';
+    const sol = data.sol ? `sol=${data.sol}&` : '';
+    const camera = data.camera ? `camera=${data.camera}&` : '';
+    const page = data.page ? `page=${data.page}&` : '';
     return this._httpClient.get<NasaAPIMarsPhotosResponse>(
       nasaAPIRequestBuilder(
-        `${NASA_MARS_ROUTE}/rovers/${rover}/photos?${sol}&camera=${
-          camera ?? 'all'
-        }&page=${page ?? 1}&${earth_date}`
+        `${NASA_MARS_ROUTE}/rovers/${rover}/photos?${sol}${camera}${page}${earth_date}`
       )
     );
   }
 
   public getMarsRoverManifest(
-    rover: NasaAPIMarsRover
+    rover: MarsRover
   ): Observable<NasaAPIMarsManifestResponse | null> {
     return this._httpClient.get<NasaAPIMarsManifestResponse>(
       nasaAPIRequestBuilder(`${NASA_MARS_ROUTE}/manifests/${rover}`)

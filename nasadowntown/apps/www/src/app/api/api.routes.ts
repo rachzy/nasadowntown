@@ -1,4 +1,6 @@
-export const NASA_API_KEY = 'DEMO_KEY';
+import { API_KEY } from "./api.config";
+
+export const NASA_API_KEY = API_KEY;
 
 export const NASA_DEFAULT_ROUTE = 'https://api.nasa.gov';
 
