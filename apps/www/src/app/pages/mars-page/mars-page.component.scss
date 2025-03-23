@@ -1,5 +1,5 @@
 :host {
-  @apply flex flex-col justify-center items-center;
+  @apply flex flex-col justify-center items-center gap-4;
   @apply w-full min-h-[100vh] p-4;
 }
 
@@ -40,5 +40,16 @@
     &:hover {
       @apply transform scale-105;
     }
+  }
+}
+
+.photos-container {
+  @apply min-w-[70vw] w-full self-center;
+  @apply flex justify-center flex-wrap gap-3;
+
+  .photo {
+    @apply max-w-[250px] rounded-md;
+    @apply cursor-pointer;
+    @apply object-cover;
   }
 }

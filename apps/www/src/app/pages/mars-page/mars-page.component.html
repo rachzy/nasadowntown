@@ -1,12 +1,28 @@
 <h1 class="title">Planet <b>Mars</b></h1>
 
+<div class="toolbar">
+  <mat-form-field>
+    <mat-label>Rover</mat-label>
+    <mat-select>
+      @for (rover of rovers; track rover) {
+      <mat-option [value]="rover">{{ rover }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Rover</mat-label>
+    <mat-select>
+      @for (rover of rovers; track rover) {
+      <mat-option [value]="rover">{{ rover }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
 <div class="photos-container">
   @if (isLoaded$ | async) { @for (photo of marsPhotos$ | async; track photo) {
-  <div class="photo">
-    <img [src]="photo.img_src" alt="Mars photo" />
-    <p>{{ photo.earth_date }}</p>
-  </div>
+  <img class="photo" [src]="photo.img_src" alt="Mars photo" />
   } } @else {
-  <nd-spinner></nd-spinner>
+  <nd-spinner class="ml-[40px]"></nd-spinner>
   }
 </div>

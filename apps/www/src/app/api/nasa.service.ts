@@ -19,7 +19,7 @@ export class NasaService {
 
   public getMarsPhotos(
     data: NasaAPIMarsPhotosRequest
-  ): Observable<NasaAPIMarsPhotosResponse | null> {
+  ): Observable<NasaAPIMarsPhotosResponse> {
     const { rover, earthDate } = data;
     const earth_date = earthDate
       ? `earth_date=${format(earthDate, 'yyyy-MM-dd')}`
@@ -36,7 +36,7 @@ export class NasaService {
 
   public getMarsRoverManifest(
     rover: MarsRover
-  ): Observable<NasaAPIMarsManifestResponse | null> {
+  ): Observable<NasaAPIMarsManifestResponse> {
     return this._httpClient.get<NasaAPIMarsManifestResponse>(
       nasaAPIRequestBuilder(`${NASA_MARS_ROUTE}/manifests/${rover}`)
     );
