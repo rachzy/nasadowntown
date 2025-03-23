@@ -1,7 +1,7 @@
 import {
   NasaAPIMarsPhoto,
   NasaAPIMarsPhotosRequest,
-} from '../interfaces/nasa/mars-photos';
+} from '../interfaces/nasa-api/mars-photos';
 
 export const filterPhotosByPayload = (
   photos: NasaAPIMarsPhoto[],

@@ -7,7 +7,7 @@ import {
   NasaAPIMarsManifestResponse,
   NasaAPIMarsPhotosRequest,
   NasaAPIMarsPhotosResponse,
-} from '../interfaces/nasa/mars-photos';
+} from '../interfaces/nasa-api/mars-photos';
 import { Observable } from 'rxjs';
 import { format } from 'date-fns';
 

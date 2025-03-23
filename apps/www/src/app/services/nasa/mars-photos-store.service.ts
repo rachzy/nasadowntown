@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { NasaService } from '../../api/nasa.service';
 import { BehaviorSubject, firstValueFrom, map, Subject, takeUntil } from 'rxjs';
 import {
@@ -6,44 +6,52 @@ import {
   NasaAPIMarsPhoto,
   NasaAPIMarsPhotosRequest,
   RoverPhotosMetadata,
-} from '../../interfaces/nasa/mars-photos';
+} from '../../interfaces/nasa-api/mars-photos';
 import { filterPhotosByPayload } from '../../utils/mars-photots';
+import { LocalStorageService } from '../local-storage.service';
+import { PreviousPayloads } from '../../interfaces/nasa-api';
 
-type PreviousPayloads =
-  | {
-      type: 'photos';
-      payload: NasaAPIMarsPhotosRequest;
-    }
-  | {
-      type: 'manifest';
-      payload: MarsRover;
-    };
-
+type Manifests = Record<MarsRover, RoverPhotosMetadata>;
 @Injectable({
   providedIn: 'root',
 })
 export class MarsPhotosStoreService {
-  private readonly destroy$ = new Subject<void>();
+  private readonly _localStorageService = inject(LocalStorageService);
 
-  private readonly _previousPayloads = signal<PreviousPayloads[]>([]);
+  private readonly _previousPayloads = signal<PreviousPayloads[]>(
+    this._localStorageService.getItem<PreviousPayloads[]>('previousPayloads') ??
+      []
+  );
+  private readonly _marsPhotos = new BehaviorSubject<NasaAPIMarsPhoto[]>(
+    this._localStorageService.getItem<NasaAPIMarsPhoto[]>('marsPhotos') ?? []
+  );
+  private readonly _manifests = new BehaviorSubject<Manifests | null>(
+    this._localStorageService.getItem<Manifests>('manifests') ?? null
+  );
 
-  private readonly _marsPhotos = new BehaviorSubject<NasaAPIMarsPhoto[]>([]);
   public readonly marsPhotos$ = this._marsPhotos.asObservable();
-
-  private readonly _manifests = new BehaviorSubject<Record<
-    MarsRover,
-    RoverPhotosMetadata
-  > | null>(null);
   public readonly manifests$ = this._manifests.asObservable();
+  public readonly hasFetchedInitialData$ = this.manifests$.pipe(
+    map((manifests) => Boolean(manifests))
+  );
 
   constructor(private readonly _nasaService: NasaService) {
-    this._fetchManifest('curiosity');
+    this._marsPhotos.subscribe((photos) =>
+      this._localStorageService.setItem('marsPhotos', photos)
+    );
+
     this.manifests$.subscribe((manifests) => {
-      if (!manifests || this._marsPhotos.getValue().length > 0) {
-        return;
-      }
-      this._fetchRoverLatestPhotos(manifests['curiosity']);
+      this._localStorageService.setItem('manifests', manifests);
     });
+
+    // If there are no manifests, fetch the one for curiosity
+    if (!this._manifests.getValue()) {
+      this._fetchManifest('curiosity');
+    }
+
+    if (this._marsPhotos.getValue().length === 0) {
+      this._fetchRoverLatestPhotos('curiosity');
+    }
   }
 
   public addMarsPhotos(photos: NasaAPIMarsPhoto[]): void {
@@ -59,9 +67,21 @@ export class MarsPhotosStoreService {
     } as Record<MarsRover, RoverPhotosMetadata>);
   }
 
-  public readonly hasFetchedInitialData$ = this.manifests$.pipe(
-    map((manifests) => Boolean(manifests))
-  );
+  public async getPhotos(
+    payload: NasaAPIMarsPhotosRequest
+  ): Promise<NasaAPIMarsPhoto[]> {
+    const isAlreadyFetched = this._previousPayloads().some(
+      (request) =>
+        request.type === 'mars-photos' &&
+        JSON.stringify(request.payload) === JSON.stringify(payload)
+    );
+
+    if (!isAlreadyFetched) {
+      await this._fetchPhotos(payload);
+    }
+
+    return filterPhotosByPayload(this._marsPhotos.getValue(), payload);
+  }
 
   private async _fetchPhotos(data: NasaAPIMarsPhotosRequest): Promise<void> {
     const { photos } = await firstValueFrom(
@@ -75,55 +95,39 @@ export class MarsPhotosStoreService {
 
     this._previousPayloads.update((prev) => [
       ...prev,
-      { type: 'photos', payload: data },
+      { type: 'mars-photos', payload: data },
     ]);
   }
 
-  private _fetchManifest(rover: MarsRover): void {
-    this._nasaService
-      .getMarsRoverManifest(rover)
-      .pipe(
-        map((res) => res?.photo_manifest),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((manifest) => {
-        if (!manifest) {
-          throw new Error('No manifest found');
-        }
-        this.addManifest(manifest);
-      });
+  private async _fetchManifest(rover: MarsRover): Promise<void> {
+    const { photo_manifest } = await firstValueFrom(
+      this._nasaService.getMarsRoverManifest(rover)
+    );
+    this.addManifest(photo_manifest);
 
     this._previousPayloads.update((prev) => [
       ...prev,
-      { type: 'manifest', payload: rover },
+      { type: 'mars-rover-manifest', payload: rover },
     ]);
   }
 
-  private _fetchRoverLatestPhotos(manifest: RoverPhotosMetadata): void {
-    const latestPhotosData = manifest.photos.pop();
+  private _fetchRoverLatestPhotos(rover: MarsRover): void {
+    const manifest = this._manifests.getValue()?.[rover];
+    if (!manifest) {
+      throw new Error(
+        'Trying to fetch photos for a rover that has no manifest'
+      );
+    }
+
+    const latestPhotosData = manifest?.photos.pop();
     if (!latestPhotosData) {
       throw new Error('No photos found');
     }
-    this._fetchPhotos({
+
+    this.getPhotos({
       rover: manifest.name.toLowerCase() as MarsRover,
       earthDate: new Date(latestPhotosData.earth_date),
       page: 1,
     });
-  }
-
-  public async getPhotos(
-    payload: NasaAPIMarsPhotosRequest
-  ): Promise<NasaAPIMarsPhoto[]> {
-    const isAlreadyFetched = this._previousPayloads().some(
-      (request) =>
-        request.type === 'photos' &&
-        JSON.stringify(request.payload) === JSON.stringify(payload)
-    );
-
-    if (!isAlreadyFetched) {
-      await this._fetchPhotos(payload);
-    }
-
-    return filterPhotosByPayload(this._marsPhotos.getValue(), payload);
   }
 }
