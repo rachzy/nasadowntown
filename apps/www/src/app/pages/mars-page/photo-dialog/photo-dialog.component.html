@@ -1,0 +1,41 @@
+<mat-dialog-content class="container">
+  @if (selectedPhoto$ | async; as photo) {
+  <img class="img" [src]="photo.img_src" width="550px" alt="Mars photo" />
+  <div class="content">
+    <div>
+      <h2 class="title">
+        <b>{{ photo.rover.name }}</b>
+      </h2>
+      <ul>
+        <li>
+          <p><b>Photo ID: </b> {{ photo.id }}</p>
+        </li>
+        <li>
+          <p><b>Camera: </b> {{ photo.camera.full_name }}</p>
+        </li>
+      </ul>
+    </div>
+    <ul>
+      <li>
+        <p><b>Sol: </b> {{ photo.sol }}</p>
+      </li>
+      <li>
+        <p><b>Earth Date: </b> {{ formatDate(photo.earth_date) }}</p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p><b>Rover: </b> {{ photo.rover.name }}</p>
+      </li>
+      <li>
+        <p><b>Landing date: </b> {{ formatDate(photo.rover.landing_date) }}</p>
+      </li>
+      <li>
+        <p><b>Status: </b> {{ photo.rover.status }}</p>
+      </li>
+    </ul>
+  </div>
+  } @else {
+  <nd-spinner class="ml-[40px]"></nd-spinner>
+  }
+</mat-dialog-content>

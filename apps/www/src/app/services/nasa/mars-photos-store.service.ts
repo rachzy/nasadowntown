@@ -35,6 +35,8 @@ export class MarsPhotosStoreService {
     map((manifests) => Boolean(manifests))
   );
 
+  public readonly selectedPhotoID = signal<number | null>(null);
+
   constructor(private readonly _nasaService: NasaService) {
     this._marsPhotos.subscribe((photos) =>
       this._localStorageService.setItem('marsPhotos', photos)

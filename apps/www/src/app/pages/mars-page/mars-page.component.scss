@@ -45,11 +45,21 @@
 
 .photos-container {
   @apply min-w-[70vw] w-full self-center;
-  @apply flex justify-center flex-wrap gap-3;
+  @apply flex justify-center flex-wrap gap-6;
 
   .photo {
-    @apply max-w-[250px] rounded-md;
-    @apply cursor-pointer;
-    @apply object-cover;
+    @apply m-0 p-0;
+    @apply transition-all duration-300;
+
+    &:hover {
+      @apply transform-gpu scale-110;
+    }
+
+    img {
+      @apply max-w-[250px] rounded-md;
+      @apply cursor-pointer;
+      @apply object-cover;
+      @apply border-white border-[0.5px] border-opacity-50;
+    }
   }
 }

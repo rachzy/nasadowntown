@@ -6,15 +6,23 @@ import { FormBuilder } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { ROVERS } from '../../constants/mars-photos';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { PhotoDialogComponent } from './photo-dialog/photo-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'nd-mars-page',
-  imports: [CommonModule, SpinnerComponent, MatSelectModule, MatFormFieldModule],
+  imports: [
+    CommonModule,
+    SpinnerComponent,
+    MatSelectModule,
+    MatFormFieldModule,
+  ],
   templateUrl: './mars-page.component.html',
   styleUrl: './mars-page.component.scss',
 })
 export class MarsPageComponent {
   private readonly _nasaMarsPhotosService = inject(MarsPhotosStoreService);
+  private readonly _matDialogService = inject(MatDialog);
   private readonly _fb = inject(FormBuilder);
 
   public readonly _form = this._fb.group({
@@ -28,4 +36,9 @@ export class MarsPageComponent {
     this._nasaMarsPhotosService.hasFetchedInitialData$;
 
   public readonly rovers = ROVERS;
+
+  public openPhotoDialog(photoID: number): void {
+    this._nasaMarsPhotosService.selectedPhotoID.set(photoID);
+    this._matDialogService.open(PhotoDialogComponent);
+  }
 }

@@ -21,7 +21,9 @@
 
 <div class="photos-container">
   @if (isLoaded$ | async) { @for (photo of marsPhotos$ | async; track photo) {
-  <img class="photo" [src]="photo.img_src" alt="Mars photo" />
+  <button class="photo" (click)="openPhotoDialog(photo.id)">
+    <img [src]="photo.img_src" alt="Mars photo" />
+  </button>
   } } @else {
   <nd-spinner class="ml-[40px]"></nd-spinner>
   }

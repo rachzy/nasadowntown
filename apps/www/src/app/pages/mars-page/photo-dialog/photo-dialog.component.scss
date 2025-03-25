@@ -1,0 +1,33 @@
+.container {
+  @apply w-full h-full;
+  @apply flex flex-wrap;
+  @apply overflow-visible;
+
+  @apply p-10 gap-8;
+
+  .img {
+    @apply border-white border-[0.5px];
+  }
+
+  .content {
+    @apply flex flex-col gap-8 pb-8;
+    @apply text-white;
+
+    .title {
+      @apply text-5xl;
+      @apply font-light font-smooch;
+    }
+
+    p {
+      @apply text-xl font-extralight font-ubuntu;
+    }
+
+    b {
+      @apply font-bold;
+    }
+
+    i {
+      @apply text-gray-400 text-3xl;
+    }
+  }
+}
