@@ -1,0 +1,12 @@
+@if(photosByDate(); as photosByDate) { @for (date of dates(); track date) {
+<div class="date-container">
+  <h3 class="date-title">{{ formatDate(date) }}</h3>
+  <div class="photos-container">
+    @for(photo of photosByDate[date]; track photo.id) {
+    <button class="photo" (click)="openPhotoDialog(photo.id)">
+      <img [src]="photo.img_src" alt="Mars photo" />
+    </button>
+    }
+  </div>
+</div>
+} }
