@@ -12,7 +12,7 @@
 
   .photos-container {
     @apply w-full;
-    @apply flex justify-between flex-wrap gap-x-4 gap-y-6;
+    @apply flex justify-start flex-wrap gap-x-5 gap-y-6;
 
     .photo {
       @apply m-0 p-0;

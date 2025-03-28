@@ -1,5 +1,5 @@
 export type MarsRover = 'curiosity' | 'opportunity' | 'spirit';
-type MarsRoverCapitalized = 'Curiosity' | 'Opportunity' | 'Spirit';
+export type CapitalizedMarsRover = 'Curiosity' | 'Opportunity' | 'Spirit';
 export type MarsRoverCamera =
   | 'FHAZ'
   | 'RHAZ'
@@ -26,8 +26,8 @@ interface RoverMetadata {
   status: string;
 }
 
-export interface RoverPhotosMetadata {
-  name: MarsRoverCapitalized;
+export interface Manifest {
+  name: CapitalizedMarsRover;
   landing_date: string;
   launch_date: string;
   status: string;
@@ -50,22 +50,22 @@ interface NasaAPIMarsPhotosBaseRequest {
   earthDate?: Date;
 }
 
-export type NasaAPIMarsPhotosRequest =
-  | (NasaAPIMarsPhotosBaseRequest & {
-      rover: 'curiosity';
-      camera?:
-        | 'FHAZ'
-        | 'RHAZ'
-        | 'MAST'
-        | 'CHEMCAM'
-        | 'MAHLI'
-        | 'MARDI'
-        | 'NAVCAM';
-    })
-  | (NasaAPIMarsPhotosBaseRequest & {
-      rover: 'opportunity' | 'spirit';
-      camera?: 'FHAZ' | 'RHAZ' | 'NAVCAM' | 'PANCAM' | 'MINITES';
-    });
+export type CuriosityCameras =
+  | 'FHAZ'
+  | 'RHAZ'
+  | 'MAST'
+  | 'CHEMCAM'
+  | 'MAHLI'
+  | 'MARDI'
+  | 'NAVCAM';
+
+export type OtherCameras = 'FHAZ' | 'RHAZ' | 'NAVCAM' | 'PANCAM' | 'MINITES';
+export type RoverCameras = CuriosityCameras | OtherCameras;
+
+export type NasaAPIMarsPhotosRequest = NasaAPIMarsPhotosBaseRequest & {
+  rover: MarsRover;
+  camera?: RoverCameras;
+};
 
 export interface NasaAPIMarsPhoto {
   id: number;
@@ -81,5 +81,5 @@ export interface NasaAPIMarsPhotosResponse {
 }
 
 export interface NasaAPIMarsManifestResponse {
-  photo_manifest: RoverPhotosMetadata;
+  photo_manifest: Manifest;
 }

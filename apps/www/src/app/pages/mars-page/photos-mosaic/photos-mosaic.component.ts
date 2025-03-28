@@ -18,14 +18,19 @@ export class PhotosMosaicComponent {
   public readonly photos = input.required<NasaAPIMarsPhoto[]>();
   public readonly photosByDate = computed<Record<string, NasaAPIMarsPhoto[]>>(
     () =>
-      this.photos().reduce<Record<string, NasaAPIMarsPhoto[]>>((acc, curr) => {
-        const date = new Date(curr.earth_date);
-        const dateKey = date.getTime().toString();
-        return {
-          ...acc,
-          [dateKey]: [...(acc[dateKey] ?? []), curr],
-        };
-      }, {})
+      this.photos()
+        .sort(
+          (a, b) =>
+            new Date(b.earth_date).getTime() - new Date(a.earth_date).getTime()
+        )
+        .reduce<Record<string, NasaAPIMarsPhoto[]>>((acc, curr) => {
+          const date = new Date(curr.earth_date);
+          const dateKey = date.getTime().toString();
+          return {
+            ...acc,
+            [dateKey]: [...(acc[dateKey] ?? []), curr],
+          };
+        }, {})
   );
 
   public readonly dates = computed(() => Object.keys(this.photosByDate()));

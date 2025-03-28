@@ -1,17 +1,18 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { NasaService } from '../../api/nasa.service';
-import { BehaviorSubject, firstValueFrom, map, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map } from 'rxjs';
 import {
   MarsRover,
   NasaAPIMarsPhoto,
   NasaAPIMarsPhotosRequest,
-  RoverPhotosMetadata,
+  Manifest,
 } from '../../interfaces/nasa-api/mars-photos';
 import { filterPhotosByPayload } from '../../utils/mars-photots';
 import { LocalStorageService } from '../local-storage.service';
 import { PreviousPayloads } from '../../interfaces/nasa-api';
+import { DEFAULT_ROVER } from '../../constants/mars-photos';
 
-type Manifests = Record<MarsRover, RoverPhotosMetadata>;
+type Manifests = Record<MarsRover, Manifest>;
 @Injectable({
   providedIn: 'root',
 })
@@ -47,26 +48,26 @@ export class MarsPhotosStoreService {
     });
 
     // If there are no manifests, fetch the one for curiosity
-    if (!this._manifests.getValue()) {
-      this._fetchManifest('curiosity');
-    }
-
     if (this._marsPhotos.getValue().length === 0) {
-      this._fetchRoverLatestPhotos('curiosity');
+      this._fetchRoverLatestPhotos(DEFAULT_ROVER);
     }
   }
 
   public addMarsPhotos(photos: NasaAPIMarsPhoto[]): void {
     const currentPhotos = this._marsPhotos.getValue();
-    this._marsPhotos.next([...currentPhotos, ...photos]);
+    const nonRepeatedPhotos = photos.filter(
+      (photo) =>
+        !currentPhotos.some((currentPhoto) => currentPhoto.id === photo.id)
+    );
+    this._marsPhotos.next([...currentPhotos, ...nonRepeatedPhotos]);
   }
 
-  public addManifest(manifest: RoverPhotosMetadata): void {
+  public addManifest(manifest: Manifest): void {
     const currentManifests = this._manifests.getValue() ?? {};
     this._manifests.next({
       ...currentManifests,
       [manifest.name.toLowerCase()]: manifest,
-    } as Record<MarsRover, RoverPhotosMetadata>);
+    } as Record<MarsRover, Manifest>);
   }
 
   public async getPhotos(
@@ -79,13 +80,25 @@ export class MarsPhotosStoreService {
     );
 
     if (!isAlreadyFetched) {
-      await this._fetchPhotos(payload);
+      return await this._fetchPhotos(payload);
     }
 
     return filterPhotosByPayload(this._marsPhotos.getValue(), payload);
   }
 
-  private async _fetchPhotos(data: NasaAPIMarsPhotosRequest): Promise<void> {
+  public async getManifest(rover: MarsRover): Promise<Manifest> {
+    const manifests = this._manifests.getValue();
+
+    if (!manifests || !Object.hasOwn(manifests, rover)) {
+      return await this._fetchManifest(rover);
+    }
+
+    return manifests[rover];
+  }
+
+  private async _fetchPhotos(
+    data: NasaAPIMarsPhotosRequest
+  ): Promise<NasaAPIMarsPhoto[]> {
     const { photos } = await firstValueFrom(
       this._nasaService.getMarsPhotos(data)
     );
@@ -99,9 +112,11 @@ export class MarsPhotosStoreService {
       ...prev,
       { type: 'mars-photos', payload: data },
     ]);
+
+    return photos;
   }
 
-  private async _fetchManifest(rover: MarsRover): Promise<void> {
+  private async _fetchManifest(rover: MarsRover): Promise<Manifest> {
     const { photo_manifest } = await firstValueFrom(
       this._nasaService.getMarsRoverManifest(rover)
     );
@@ -111,22 +126,21 @@ export class MarsPhotosStoreService {
       ...prev,
       { type: 'mars-rover-manifest', payload: rover },
     ]);
+
+    return photo_manifest;
   }
 
-  private _fetchRoverLatestPhotos(rover: MarsRover): void {
-    const manifest = this._manifests.getValue()?.[rover];
-    if (!manifest) {
-      throw new Error(
-        'Trying to fetch photos for a rover that has no manifest'
-      );
-    }
+  private async _fetchRoverLatestPhotos(
+    rover: MarsRover
+  ): Promise<NasaAPIMarsPhoto[]> {
+    const manifest = await this.getManifest(rover);
 
-    const latestPhotosData = manifest?.photos.pop();
+    const latestPhotosData = manifest.photos.pop();
     if (!latestPhotosData) {
       throw new Error('No photos found');
     }
 
-    this.getPhotos({
+    return await this.getPhotos({
       rover: manifest.name.toLowerCase() as MarsRover,
       earthDate: new Date(latestPhotosData.earth_date),
       page: 1,

@@ -4,7 +4,7 @@ type BtnVariants = 'primary' | 'secondary' | 'invisible' | 'bordered';
 type BtnSizes = 'sm' | 'md' | 'lg';
 
 const btnVariants: Record<BtnVariants, string> = {
-  primary: 'bg-white text-black',
+  primary: 'bg-white text-black' + ' duration-200 ease-in-out hover:scale-105',
   secondary: 'bg-black text-white',
   invisible: 'bg-transparent text-white',
   bordered:
