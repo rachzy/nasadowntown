@@ -1,4 +1,7 @@
 <mat-dialog-content class="container">
+  <button class="close-button" (click)="closeDialog()">
+    <fa-icon [icon]="faTimes"></fa-icon>
+  </button>
   @if (selectedPhoto$ | async; as photo) {
   <img class="img" [src]="photo.img_src" width="550px" alt="Mars photo" />
   <div class="content">

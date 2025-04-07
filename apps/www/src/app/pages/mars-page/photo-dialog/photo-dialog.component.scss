@@ -4,6 +4,20 @@
   @apply overflow-visible;
 
   @apply p-10 gap-8;
+  @apply relative;
+
+  .close-button {
+    @apply absolute top-4 right-4;
+    @apply text-white text-3xl;
+    @apply p-2;
+    @apply cursor-pointer;
+    @apply hover:text-gray-300;
+    @apply transition-colors;
+    @apply z-10;
+    @apply rounded-full;
+    @apply w-10 h-10;
+    @apply flex items-center justify-center;
+  }
 
   .img {
     @apply border-white border-[0.5px];
