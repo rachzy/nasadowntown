@@ -62,6 +62,10 @@ export class MarsPhotosStoreService {
     this._marsPhotos.next([...currentPhotos, ...nonRepeatedPhotos]);
   }
 
+  public updateMarsPhotos(photos: NasaAPIMarsPhoto[]): void {
+    this._marsPhotos.next(photos);
+  }
+
   public addManifest(manifest: Manifest): void {
     const currentManifests = this._manifests.getValue() ?? {};
     this._manifests.next({

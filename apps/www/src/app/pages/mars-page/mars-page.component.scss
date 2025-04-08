@@ -24,10 +24,12 @@
 }
 
 .toolbar {
-  @apply flex flex-col flex-wrap justify-center items-center;
+  @apply flex flex-col flex-wrap justify-center items-stretch;
+  @apply w-full max-w-[1200px] gap-4;
 
   .inputs-container {
     @apply flex flex-wrap justify-center gap-4;
+    @apply w-full;
 
     .field {
       @apply flex-1 min-w-[200px];
@@ -35,7 +37,73 @@
   }
 
   .buttons-container {
-    @apply flex flex-wrap flex-row justify-center gap-4;
-    @apply w-full;
+    @apply w-full flex justify-center;
+
+    ::ng-deep nd-loading-button {
+      @apply w-auto;
+
+      @media (max-width: 640px) {
+        @apply w-full;
+
+        button {
+          @apply w-full flex justify-center items-center;
+        }
+      }
+
+      button {
+        @apply flex justify-center items-center;
+      }
+    }
   }
+}
+
+.filter-container {
+  @apply relative flex justify-end;
+  @apply w-full max-w-[1200px];
+  @apply -mt-4;
+
+  .filter-button {
+    @apply bg-transparent border-none cursor-pointer;
+    @apply text-gray-600 text-xl p-2 rounded;
+    @apply transition-all duration-200;
+
+    &:hover {
+      @apply bg-gray-100 text-gray-800;
+    }
+  }
+}
+
+::ng-deep {
+  .mdc-menu-surface.mat-mdc-menu-panel {
+    background: black !important;
+    border-radius: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+  }
+
+  .mat-mdc-menu-content {
+    background: black !important;
+    padding: 0 !important;
+  }
+
+  .mat-mdc-menu-item {
+    color: white !important;
+    transition: background-color 0.2s ease;
+
+    .mdc-list-item__primary-text {
+      color: white !important;
+    }
+
+    &:hover {
+      background: rgba(75, 75, 75, 0.5) !important;
+    }
+
+    fa-icon {
+      color: white !important;
+    }
+  }
+}
+
+.mosaic {
+  @apply w-full max-w-[1200px];
 }

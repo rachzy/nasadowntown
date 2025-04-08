@@ -13,6 +13,7 @@
       <mat-error>This field is required</mat-error>
       }
     </mat-form-field>
+
     <mat-form-field class="field">
       <mat-label>Camera</mat-label>
       <mat-select [formControl]="controls.camera">
@@ -23,6 +24,7 @@
         } }
       </mat-select>
     </mat-form-field>
+
     <mat-form-field class="field">
       <mat-label>Sol</mat-label>
       <input
@@ -32,6 +34,7 @@
         [formControl]="controls.sol"
       />
     </mat-form-field>
+
     <mat-form-field class="field">
       <mat-label>Earth date</mat-label>
       <input
@@ -47,20 +50,38 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
   </div>
+
   <div class="buttons-container">
     <nd-loading-button
       [loading]="isLoading"
       (clicked)="fetchPhotos()"
       size="sm"
       variant="primary"
+      class="w-full"
     >
       Search
     </nd-loading-button>
   </div>
 </div>
 
+<div class="filter-container">
+  <button class="filter-button" [matMenuTriggerFor]="filterMenu">
+    <fa-icon [icon]="faFilter"></fa-icon>
+  </button>
+  <mat-menu #filterMenu="matMenu">
+    <button mat-menu-item (click)="sortPhotos('newest')">
+      <fa-icon [icon]="faArrowDownWideShort" class="mr-2"></fa-icon>
+      Newest First
+    </button>
+    <button mat-menu-item (click)="sortPhotos('oldest')">
+      <fa-icon [icon]="faArrowUpWideShort" class="mr-2"></fa-icon>
+      Oldest First
+    </button>
+  </mat-menu>
+</div>
+
 @if ((marsPhotos$ | async); as photos) {
-<nd-photos-mosaic [photos]="photos"></nd-photos-mosaic>
+<nd-photos-mosaic [photos]="photos" class="mosaic"></nd-photos-mosaic>
 } @else {
 <nd-spinner class="ml-[40px]"></nd-spinner>
 }

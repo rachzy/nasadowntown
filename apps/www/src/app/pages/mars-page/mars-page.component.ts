@@ -9,10 +9,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { map } from 'rxjs';
+import { map, take } from 'rxjs';
 import { MarsRover, RoverCameras } from '../../interfaces/nasa-api/mars-photos';
 import { PhotosMosaicComponent } from './photos-mosaic/photos-mosaic.component';
-import { faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import {
+  faRotateLeft,
+  faFilter,
+  faArrowDownWideShort,
+  faArrowUpWideShort,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -20,9 +25,12 @@ import { LoadingButtonComponent } from '../../components/loading-button/loading-
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingDialogComponent } from '../../components/loading-dialog/loading-dialog.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'nd-mars-page',
+  standalone: true,
   imports: [
     CommonModule,
     SpinnerComponent,
@@ -35,6 +43,9 @@ import { LoadingDialogComponent } from '../../components/loading-dialog/loading-
     MatDatepickerModule,
     LoadingButtonComponent,
     MatProgressSpinnerModule,
+    LoadingDialogComponent,
+    MatMenuModule,
+    MatButtonModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './mars-page.component.html',
@@ -69,6 +80,9 @@ export class MarsPageComponent {
 
   // ICONS
   public readonly faRotateLeft = faRotateLeft;
+  public readonly faFilter = faFilter;
+  public readonly faArrowDownWideShort = faArrowDownWideShort;
+  public readonly faArrowUpWideShort = faArrowUpWideShort;
 
   public isLoading = false;
 
@@ -119,5 +133,30 @@ export class MarsPageComponent {
       this.isLoading = false;
       dialogRef.close();
     }
+  }
+
+  public sortPhotos(sortBy: 'newest' | 'oldest'): void {
+    this.marsPhotos$.pipe(take(1)).subscribe({
+      next: (photos) => {
+        if (!photos || photos.length === 0) {
+          this._snackBar.open('No photos to sort', 'Dismiss');
+          return;
+        }
+
+        const sortedPhotos = [...photos].sort((a, b) => {
+          const dateA = new Date(a.earth_date).getTime();
+          const dateB = new Date(b.earth_date).getTime();
+          return sortBy === 'newest' ? dateB - dateA : dateA - dateB;
+        });
+        this._nasaMarsPhotosService.updateMarsPhotos(sortedPhotos);
+      },
+      error: (error) => {
+        console.error('Error sorting photos:', error);
+        this._snackBar.open(
+          'Error sorting photos. Please try again.',
+          'Dismiss'
+        );
+      },
+    });
   }
 }

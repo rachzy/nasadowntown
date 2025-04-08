@@ -1,10 +1,10 @@
 :host {
-  @apply w-[90%] min-w-[70vw];
+  @apply w-full;
 }
 
 .date-container {
   @apply flex flex-col;
-  @apply p-4 gap-4;
+  @apply gap-4;
 
   .date-title {
     @apply font-ubuntu;
@@ -12,7 +12,11 @@
 
   .photos-container {
     @apply w-full;
-    @apply flex justify-start flex-wrap gap-x-5 gap-y-6;
+    @apply flex justify-between flex-wrap gap-x-6 gap-y-6;
+
+    @media (max-width: 640px) {
+      @apply justify-center;
+    }
 
     .photo {
       @apply m-0 p-0;
