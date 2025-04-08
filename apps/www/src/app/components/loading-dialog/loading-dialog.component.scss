@@ -1,0 +1,15 @@
+.loading-dialog {
+  @apply flex items-center justify-center;
+  @apply w-full h-full;
+}
+
+.spinner {
+  @apply w-12 h-12;
+  @apply relative;
+
+  ::ng-deep .spinner-inner {
+    @apply w-full h-full;
+    @apply border-4 border-white border-t-transparent rounded-full;
+    @apply animate-spin;
+  }
+}

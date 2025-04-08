@@ -25,10 +25,13 @@ export class NdBtnDirective {
   public readonly variant = input<BtnVariants>('primary');
   public readonly size = input<BtnSizes>('md');
   public readonly blocked = input<boolean>(false);
+  public readonly loading = input<boolean>(false);
 
   @HostBinding('class') get classes(): string {
     return `rounded-md ${btnSizes[this.size()]} ${
       btnVariants[this.variant()]
-    } ${this.blocked() ? 'cursor-not-allowed opacity-50' : ''}`;
+    } ${this.blocked() ? 'cursor-not-allowed opacity-50' : ''} ${
+      this.loading() ? 'cursor-wait' : ''
+    }`;
   }
 }

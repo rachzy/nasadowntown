@@ -48,9 +48,14 @@
     </mat-form-field>
   </div>
   <div class="buttons-container">
-    <button (click)="fetchPhotos()" size="sm" variant="primary" ndBtn>
+    <nd-loading-button
+      [loading]="isLoading"
+      (clicked)="fetchPhotos()"
+      size="sm"
+      variant="primary"
+    >
       Search
-    </button>
+    </nd-loading-button>
   </div>
 </div>
 

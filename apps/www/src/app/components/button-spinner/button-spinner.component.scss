@@ -1,0 +1,10 @@
+.spinner {
+  @apply w-4 h-4;
+  @apply relative;
+}
+
+.spinner-inner {
+  @apply w-full h-full;
+  @apply border-2 border-black border-t-transparent rounded-full;
+  @apply animate-spin;
+}

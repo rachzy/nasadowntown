@@ -1,0 +1,25 @@
+.content {
+  @apply flex items-center justify-center gap-2;
+  @apply transition-opacity duration-200;
+  @apply min-w-[1.5rem];
+  @apply min-h-[1.75rem];
+  @apply h-full;
+  @apply w-[120px];
+}
+
+.content.loading {
+  @apply gap-0;
+}
+
+.text {
+  @apply transition-opacity duration-200;
+  @apply whitespace-nowrap;
+}
+
+.text.hidden {
+  @apply opacity-0;
+}
+
+.spinner {
+  @apply flex-shrink-0;
+}

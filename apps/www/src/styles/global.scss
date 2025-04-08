@@ -17,7 +17,7 @@ html {
   );
   @include mat.dialog-overrides(
     (
-      container-color: #111,
+      container-color: transparent,
       subhead-color: white,
       container-max-width: 100%,
     )

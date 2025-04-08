@@ -9,14 +9,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { firstValueFrom, map } from 'rxjs';
+import { map } from 'rxjs';
 import { MarsRover, RoverCameras } from '../../interfaces/nasa-api/mars-photos';
 import { PhotosMosaicComponent } from './photos-mosaic/photos-mosaic.component';
-import { NdBtnDirective } from '../../directives/btn/nd-btn.directive';
 import { faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingButtonComponent } from '../../components/loading-button/loading-button.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingDialogComponent } from '../../components/loading-dialog/loading-dialog.component';
 
 @Component({
   selector: 'nd-mars-page',
@@ -27,10 +30,12 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatFormFieldModule,
     ReactiveFormsModule,
     PhotosMosaicComponent,
-    NdBtnDirective,
     FontAwesomeModule,
     MatInputModule,
     MatDatepickerModule,
+    LoadingButtonComponent,
+    MatProgressSpinnerModule,
+    LoadingDialogComponent,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './mars-page.component.html',
@@ -40,6 +45,7 @@ export class MarsPageComponent {
   private readonly _snackBar = inject(MatSnackBar);
   private readonly _nasaMarsPhotosService = inject(MarsPhotosStoreService);
   private readonly _fb = inject(FormBuilder);
+  private readonly _dialog = inject(MatDialog);
 
   public readonly _form = this._fb.group({
     rover: this._fb.control<MarsRover | null>(null, [Validators.required]),
@@ -65,6 +71,8 @@ export class MarsPageComponent {
   // ICONS
   public readonly faRotateLeft = faRotateLeft;
 
+  public isLoading = false;
+
   public async fetchPhotos(): Promise<void> {
     this._form.markAllAsTouched();
 
@@ -72,13 +80,19 @@ export class MarsPageComponent {
       return;
     }
 
-    const value = this._form.getRawValue();
-    const { camera, sol, earthDate } = value;
-    const rover = value.rover?.toLowerCase() as MarsRover;
-
-    if (!rover) return;
+    this.isLoading = true;
+    const dialogRef = this._dialog.open(LoadingDialogComponent, {
+      disableClose: true,
+      panelClass: 'loading-dialog',
+    });
 
     try {
+      const value = this._form.getRawValue();
+      const { camera, sol, earthDate } = value;
+      const rover = value.rover?.toLowerCase() as MarsRover;
+
+      if (!rover) return;
+
       const roverManifest = await this._nasaMarsPhotosService.getManifest(
         rover
       );
@@ -102,6 +116,9 @@ export class MarsPageComponent {
           ? err.message
           : 'An unknown error happened. Please try again later.';
       this._snackBar.open(message, 'Dismiss');
+    } finally {
+      this.isLoading = false;
+      dialogRef.close();
     }
   }
 }

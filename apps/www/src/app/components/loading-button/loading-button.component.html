@@ -1,0 +1,15 @@
+<button
+  ndBtn
+  [variant]="variant"
+  [size]="size"
+  [blocked]="blocked || loading"
+  [loading]="loading"
+  (click)="clicked.emit($event)"
+>
+  <div class="content">
+    <nd-button-spinner *ngIf="loading" class="spinner"></nd-button-spinner>
+    <span class="text" [class.hidden]="loading">
+      <ng-content></ng-content>
+    </span>
+  </div>
+</button>
