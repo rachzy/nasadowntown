@@ -4,10 +4,12 @@ import { NasaAPIMarsPhoto } from '../../../interfaces/nasa-api/mars-photos';
 import { MarsPhotosStoreService } from '../../../services/nasa/mars-photos-store.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PhotoDialogComponent } from '../photo-dialog/photo-dialog.component';
+import { BrokenImageComponent } from '../../../components/broken-image/broken-image.component';
 
 @Component({
   selector: 'nd-photos-mosaic',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, BrokenImageComponent],
   templateUrl: './photos-mosaic.component.html',
   styleUrl: './photos-mosaic.component.scss',
 })

@@ -1,0 +1,10 @@
+.broken-image {
+  @apply flex items-center justify-center;
+  @apply border-2 border-white rounded;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  .icon {
+    @apply text-red-500;
+    @apply text-4xl;
+  }
+}

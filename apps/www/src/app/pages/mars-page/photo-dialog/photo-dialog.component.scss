@@ -45,4 +45,24 @@
       @apply text-gray-400 text-3xl;
     }
   }
+
+  .hidden {
+    display: none;
+  }
+
+  .broken-image {
+    width: 550px;
+    height: 550px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+
+    .text {
+      color: #dc2626;
+      font-weight: 500;
+      font-size: 1.25rem;
+    }
+  }
 }

@@ -3,7 +3,19 @@
     <fa-icon [icon]="faTimes"></fa-icon>
   </button>
   @if (selectedPhoto$ | async; as photo) {
-  <img class="img" [src]="photo.img_src" width="550px" alt="Mars photo" />
+  <img
+    class="img"
+    [src]="photo.img_src"
+    width="550px"
+    alt="Mars photo"
+    (error)="photo.isBroken = true"
+    [class.hidden]="photo.isBroken"
+  />
+  @if (photo.isBroken) {
+  <div class="broken-image">
+    <p class="text">Image link is broken</p>
+  </div>
+  }
   <div class="content">
     <div>
       <h2 class="title">

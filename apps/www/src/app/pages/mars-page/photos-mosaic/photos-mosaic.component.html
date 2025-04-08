@@ -4,7 +4,18 @@
   <div class="photos-container">
     @for(photo of photosByDate[date]; track photo.id) {
     <button class="photo" (click)="openPhotoDialog(photo.id)">
-      <img [src]="photo.img_src" alt="Mars photo" />
+      <img
+        [src]="photo.img_src"
+        alt="Mars photo"
+        (error)="photo.isBroken = true"
+        [class.hidden]="photo.isBroken"
+      />
+      <nd-broken-image
+        *ngIf="photo.isBroken"
+        width="200px"
+        height="200px"
+        iconSize="text-2xl"
+      ></nd-broken-image>
     </button>
     }
   </div>

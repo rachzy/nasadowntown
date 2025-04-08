@@ -35,7 +35,6 @@ import { LoadingDialogComponent } from '../../components/loading-dialog/loading-
     MatDatepickerModule,
     LoadingButtonComponent,
     MatProgressSpinnerModule,
-    LoadingDialogComponent,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './mars-page.component.html',

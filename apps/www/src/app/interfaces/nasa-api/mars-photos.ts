@@ -74,6 +74,7 @@ export interface NasaAPIMarsPhoto {
   img_src: string;
   earth_date: string;
   rover: RoverMetadata;
+  isBroken?: boolean;
 }
 
 export interface NasaAPIMarsPhotosResponse {
