@@ -1,5 +1,5 @@
 :host {
-  @apply flex flex-col justify-center items-center gap-4;
+  @apply flex flex-col justify-center items-center gap-12;
   @apply w-full min-h-[100vh] p-4;
 }
 
@@ -61,6 +61,7 @@
   @apply relative flex justify-end;
   @apply w-full max-w-[1200px];
   @apply -mt-4;
+  @apply border-b border-gray-700 pb-4;
 
   .filter-button {
     @apply bg-transparent border-none cursor-pointer;
