@@ -12,7 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci --legacy-peer-deps
-      - run: npx nx connect-to-nx-cloud
       - run: npx nx build www
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
