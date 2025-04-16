@@ -46,3 +46,6 @@ Thumbs.db
 
 # Config file
 api.config.ts
+
+# Added by colleague
+apps/api/.env

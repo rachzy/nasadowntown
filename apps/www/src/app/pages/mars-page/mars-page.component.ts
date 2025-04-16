@@ -43,7 +43,6 @@ import { MatButtonModule } from '@angular/material/button';
     MatDatepickerModule,
     LoadingButtonComponent,
     MatProgressSpinnerModule,
-    LoadingDialogComponent,
     MatMenuModule,
     MatButtonModule,
   ],

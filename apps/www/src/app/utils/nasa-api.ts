@@ -1,14 +1,20 @@
-import { NASA_API_KEY, NASA_DEFAULT_ROUTE } from '../api/api.routes';
+import { ApiKeyService } from '../services/api-key.service';
+import { NASA_DEFAULT_ROUTE } from '../api/api.routes';
 
 export const nasaAPIRequestBuilder = (
-  args: string,
-  apiKey: string = NASA_API_KEY
+  path: string,
+  apiKeyService: ApiKeyService
 ): string => {
-  const unauthURI = `${NASA_DEFAULT_ROUTE}${args}${
-    args.includes('?') ? '' : '?'
+  const apiKey = apiKeyService.apiKey;
+  if (!apiKey) {
+    throw new Error('NASA API key is not available');
+  }
+
+  const unauthedURI = `${NASA_DEFAULT_ROUTE}${path}${
+    path.includes('?') ? '' : '?'
   }`;
 
-  return `${unauthURI}${
-    unauthURI.charAt(-1) == '&' ? '' : '&'
+  return `${unauthedURI}${
+    unauthedURI.charAt(-1) == '&' ? '' : '&'
   }api_key=${apiKey}`;
 };

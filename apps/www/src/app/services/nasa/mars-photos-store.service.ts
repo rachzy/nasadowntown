@@ -6,28 +6,29 @@ import {
   NasaAPIMarsPhoto,
   NasaAPIMarsPhotosRequest,
   Manifest,
+  Manifests,
 } from '../../interfaces/nasa-api/mars-photos';
 import { filterPhotosByPayload } from '../../utils/mars-photots';
 import { LocalStorageService } from '../local-storage.service';
 import { PreviousPayloads } from '../../interfaces/nasa-api';
 import { DEFAULT_ROVER } from '../../constants/mars-photos';
+import { ApiKeyService } from '../api-key.service';
 
-type Manifests = Record<MarsRover, Manifest>;
 @Injectable({
   providedIn: 'root',
 })
 export class MarsPhotosStoreService {
   private readonly _localStorageService = inject(LocalStorageService);
+  private readonly _apiKeyService = inject(ApiKeyService);
 
   private readonly _previousPayloads = signal<PreviousPayloads[]>(
-    this._localStorageService.getItem<PreviousPayloads[]>('previousPayloads') ??
-      []
+    this._localStorageService.getItem('previousPayloads') ?? []
   );
   private readonly _marsPhotos = new BehaviorSubject<NasaAPIMarsPhoto[]>(
-    this._localStorageService.getItem<NasaAPIMarsPhoto[]>('marsPhotos') ?? []
+    this._localStorageService.getItem('marsPhotos') ?? []
   );
   private readonly _manifests = new BehaviorSubject<Manifests | null>(
-    this._localStorageService.getItem<Manifests>('manifests') ?? null
+    this._localStorageService.getItem('manifests') ?? null
   );
 
   public readonly marsPhotos$ = this._marsPhotos.asObservable();
@@ -44,7 +45,9 @@ export class MarsPhotosStoreService {
     );
 
     this.manifests$.subscribe((manifests) => {
-      this._localStorageService.setItem('manifests', manifests);
+      if (manifests) {
+        this._localStorageService.setItem('manifests', manifests);
+      }
     });
 
     // If there are no manifests, fetch the one for curiosity
@@ -103,6 +106,11 @@ export class MarsPhotosStoreService {
   private async _fetchPhotos(
     data: NasaAPIMarsPhotosRequest
   ): Promise<NasaAPIMarsPhoto[]> {
+    // Ensure we have the API key before making the request
+    if (!this._apiKeyService.apiKey) {
+      await firstValueFrom(this._apiKeyService.fetchApiKey());
+    }
+
     const { photos } = await firstValueFrom(
       this._nasaService.getMarsPhotos(data)
     );
@@ -121,6 +129,11 @@ export class MarsPhotosStoreService {
   }
 
   private async _fetchManifest(rover: MarsRover): Promise<Manifest> {
+    // Ensure we have the API key before making the request
+    if (!this._apiKeyService.apiKey) {
+      await firstValueFrom(this._apiKeyService.fetchApiKey());
+    }
+
     const { photo_manifest } = await firstValueFrom(
       this._nasaService.getMarsRoverManifest(rover)
     );

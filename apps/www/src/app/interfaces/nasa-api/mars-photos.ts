@@ -42,6 +42,8 @@ export interface Manifest {
   }[];
 }
 
+export type Manifests = Record<MarsRover, Manifest>;
+
 interface NasaAPIMarsPhotosBaseRequest {
   rover: MarsRover;
   camera?: MarsRoverCamera;
