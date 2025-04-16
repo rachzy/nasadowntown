@@ -2,7 +2,12 @@
   "name": "nasadowntown",
   "version": "0.0.1",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build:www": "nx build www",
+    "build:api": "nx build api",
+    "serve:www": "nx serve www",
+    "serve:api": "nx serve api"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~19.0.0",
