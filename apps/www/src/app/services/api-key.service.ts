@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { LocalStorageService } from './local-storage.service';
 export class ApiKeyService {
   private readonly _apiKey = new BehaviorSubject<string | null>(null);
   private readonly _localStorageService = inject(LocalStorageService);
+  private readonly _configService = inject(ConfigService);
 
   constructor(private readonly _httpClient: HttpClient) {
     // Try to get API key from localStorage first
@@ -28,7 +30,7 @@ export class ApiKeyService {
 
   public fetchApiKey(): Observable<{ apiKey: string }> {
     return this._httpClient
-      .get<{ apiKey: string }>('http://localhost:3000/config/api-key')
+      .get<{ apiKey: string }>(`${this._configService.apiUrl}/config/api-key`)
       .pipe(
         tap((response) => {
           this._apiKey.next(response.apiKey);
