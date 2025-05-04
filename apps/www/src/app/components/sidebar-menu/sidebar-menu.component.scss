@@ -9,6 +9,7 @@
   @apply w-0 h-full overflow-hidden;
   @apply bg-jet;
   @apply duration-500 ease-in-out;
+  @apply z-10;
 
   &.active {
     @apply w-[350px] max-w-[100vw];
@@ -26,6 +27,7 @@
     li {
       @apply text-lg;
       @apply font-thin;
+      @apply truncate;
 
       a {
         &.active {
@@ -42,7 +44,7 @@
   .buttons-container {
     @apply flex gap-3 mt-auto;
 
-    button {
+    .button {
       @apply border-lavender-web border-[0.5px] border-solid rounded-md;
       @apply px-2 py-1;
       @apply transition-all duration-300;

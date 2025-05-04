@@ -10,4 +10,6 @@ import { CommonModule } from '@angular/common';
 export class HamburgerComponent {
   public readonly isActive = input<boolean>();
   public readonly onClick = input<VoidFunction>();
+
+  public readonly id = input.required<string>();
 }

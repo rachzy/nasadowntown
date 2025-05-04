@@ -1,5 +1,10 @@
-<button class="hamburger" [class.is-active]="isActive()" (click)="onClick()">
-  <span class="line"></span>
-  <span class="line"></span>
-  <span class="line"></span>
+<button
+  [id]="id()"
+  class="hamburger"
+  [class.is-active]="isActive()"
+  (click)="onClick()"
+>
+  <span [id]="id()" class="line"></span>
+  <span [id]="id()" class="line"></span>
+  <span [id]="id()" class="line"></span>
 </button>

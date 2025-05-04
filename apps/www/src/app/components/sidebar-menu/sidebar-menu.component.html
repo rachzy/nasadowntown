@@ -1,10 +1,16 @@
 <nd-hamburger
+  [id]="menuButtonId"
   class="menu-button"
   [isActive]="isMenuActive()"
   (click)="toggleMenu()"
 ></nd-hamburger>
 
-<div class="menu-container" [class.active]="isMenuActive()">
+<div
+  #menuContainer
+  id="menu-container"
+  class="menu-container"
+  [class.active]="isMenuActive()"
+>
   <div class="title-container">
     <h1 class="title"><b>NASA</b></h1>
     <h1 class="title">Downtown</h1>
@@ -12,18 +18,23 @@
 
   <nav class="navbar-menu">
     <ul>
+      @for(route of sidebarVisibleAppRoutes; track route.path) {
       <li>
-        <a routerLink="/home" routerLinkActive="active">Home</a>
+        <a routerLink="{{ route.path }}" routerLinkActive="active">
+          {{ route.menuTitle ?? route.title }}
+        </a>
       </li>
-      <li>
-        <a routerLink="/mars" routerLinkActive="active">Mars</a>
-      </li>
+      }
     </ul>
   </nav>
 
   <div class="buttons-container">
-    <button>
+    <a
+      class="button"
+      href="https://github.com/rachzy/nasadowntown"
+      target="_blank"
+    >
       <fa-icon class="button-icon" [icon]="faGithub" />
-    </button>
+    </a>
   </div>
 </div>
