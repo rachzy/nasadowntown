@@ -1,4 +1,5 @@
 :host {
+  @apply flex flex-col gap-8;
   @apply w-full;
 }
 
@@ -7,12 +8,21 @@
   @apply gap-4;
 
   .date-title {
+    @apply font-ubuntu font-bold;
+  }
+
+  .rovers-container {
+    @apply flex flex-col gap-4;
+  }
+
+  .rover-title {
     @apply font-ubuntu;
   }
 
   .photos-container {
     @apply w-full;
     @apply flex justify-between flex-wrap gap-x-6 gap-y-6;
+    @apply border-b border-white border-opacity-50 pb-8;
 
     @media (max-width: 640px) {
       @apply justify-center;
