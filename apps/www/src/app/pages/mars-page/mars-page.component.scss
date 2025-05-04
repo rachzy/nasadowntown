@@ -55,6 +55,11 @@
       }
     }
   }
+
+  .under-caption {
+    @apply text-sm text-gray-500 text-center;
+    @apply mt-2;
+  }
 }
 
 .filter-container {
