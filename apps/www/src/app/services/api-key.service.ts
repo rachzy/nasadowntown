@@ -33,6 +33,9 @@ export class ApiKeyService {
       .get<{ apiKey: string }>(`${this._configService.apiUrl}/config/api-key`)
       .pipe(
         tap((response) => {
+          if (!response.apiKey) {
+            throw new Error('API key is null or undefined');
+          }
           this._apiKey.next(response.apiKey);
           this._localStorageService.setItem('NASA_API_KEY', response.apiKey);
         })
