@@ -1,6 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  tap,
+  catchError,
+  of,
+  shareReplay,
+} from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { ConfigService } from './config.service';
 
@@ -13,11 +20,7 @@ export class ApiKeyService {
   private readonly _configService = inject(ConfigService);
 
   constructor(private readonly _httpClient: HttpClient) {
-    // Try to get API key from localStorage first
-    const storedKey = this._localStorageService.getItem('NASA_API_KEY');
-    if (storedKey) {
-      this._apiKey.next(storedKey);
-    }
+    this._initializeApiKey();
   }
 
   public get apiKey$(): Observable<string | null> {
@@ -28,17 +31,36 @@ export class ApiKeyService {
     return this._apiKey.getValue();
   }
 
-  public fetchApiKey(): Observable<{ apiKey: string }> {
+  public fetchApiKey(): Observable<{ apiKey: string | null }> {
     return this._httpClient
       .get<{ apiKey: string }>(`${this._configService.apiUrl}/config/api-key`)
       .pipe(
         tap((response) => {
-          if (!response.apiKey) {
-            throw new Error('API key is null or undefined');
-          }
           this._apiKey.next(response.apiKey);
           this._localStorageService.setItem('NASA_API_KEY', response.apiKey);
-        })
+        }),
+        catchError((error) => {
+          console.error('Failed to fetch API key:', error);
+
+          this._localStorageService.removeItem('NASA_API_KEY');
+          this._apiKey.next(null);
+          return of({ apiKey: null });
+        }),
+        shareReplay(1)
       );
+  }
+
+  private _initializeApiKey(): void {
+    const storedKey = this._localStorageService.getItem('NASA_API_KEY');
+    if (storedKey) {
+      this._apiKey.next(storedKey);
+      return;
+    }
+
+    this.fetchApiKey().subscribe({
+      error: (error) => {
+        console.error('Failed to initialize API key:', error);
+      },
+    });
   }
 }
