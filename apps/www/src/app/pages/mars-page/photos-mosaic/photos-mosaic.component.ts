@@ -45,7 +45,7 @@ export class PhotosMosaicComponent {
     });
   }
 
-  public openPhotoDialog(photoID: number): void {
+  public openPhotoDialog(photoID: string): void {
     this._nasaMarsPhotosService.selectedPhotoID.set(photoID);
     this._matDialogService.open(PhotoDialogComponent);
   }

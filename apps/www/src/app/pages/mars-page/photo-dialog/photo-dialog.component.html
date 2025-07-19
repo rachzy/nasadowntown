@@ -1,56 +1,66 @@
 <mat-dialog-content class="container">
-  <button class="close-button" (click)="closeDialog()">
-    <fa-icon [icon]="faTimes"></fa-icon>
+  <button class="arrow-button" (click)="handleSwitchSelectedPhoto(-1)">
+    <fa-icon [icon]="_faChevronLeft"></fa-icon>
   </button>
-  @if (selectedPhoto$ | async; as photo) {
-  <img
-    class="img"
-    [src]="photo.img_src"
-    width="550px"
-    alt="Mars photo"
-    (error)="photo.isBroken = true"
-    [class.hidden]="photo.isBroken"
-  />
-  @if (photo.isBroken) {
-  <div class="broken-image">
-    <p class="text">Image link is broken</p>
-  </div>
-  }
-  <div class="content">
-    <div>
-      <h2 class="title">
-        <b>{{ photo.rover.name }}</b>
-      </h2>
+  <div class="content-container">
+    <button class="close-button" (click)="closeDialog()">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+    @if (selectedPhoto(); as photo) {
+    <img
+      class="img"
+      [src]="photo.img_src"
+      width="550px"
+      alt="Mars photo"
+      (error)="photo.isBroken = true"
+      [class.hidden]="photo.isBroken"
+    />
+    @if (photo.isBroken) {
+    <div class="broken-image">
+      <p class="text">Image link is broken</p>
+    </div>
+    }
+    <div class="content">
+      <div>
+        <h2 class="title">
+          <b>{{ photo.rover.name }}</b>
+        </h2>
+        <ul>
+          <li>
+            <p><b>Photo ID: </b> {{ photo.id }}</p>
+          </li>
+          <li>
+            <p><b>Camera: </b> {{ photo.camera.full_name }}</p>
+          </li>
+        </ul>
+      </div>
       <ul>
         <li>
-          <p><b>Photo ID: </b> {{ photo.id }}</p>
+          <p><b>Sol: </b> {{ photo.sol }}</p>
         </li>
         <li>
-          <p><b>Camera: </b> {{ photo.camera.full_name }}</p>
+          <p><b>Earth Date: </b> {{ formatDate(photo.earth_date) }}</p>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <p><b>Rover: </b> {{ photo.rover.name }}</p>
+        </li>
+        <li>
+          <p>
+            <b>Landing date: </b> {{ formatDate(photo.rover.landing_date) }}
+          </p>
+        </li>
+        <li>
+          <p><b>Status: </b> {{ photo.rover.status }}</p>
         </li>
       </ul>
     </div>
-    <ul>
-      <li>
-        <p><b>Sol: </b> {{ photo.sol }}</p>
-      </li>
-      <li>
-        <p><b>Earth Date: </b> {{ formatDate(photo.earth_date) }}</p>
-      </li>
-    </ul>
-    <ul>
-      <li>
-        <p><b>Rover: </b> {{ photo.rover.name }}</p>
-      </li>
-      <li>
-        <p><b>Landing date: </b> {{ formatDate(photo.rover.landing_date) }}</p>
-      </li>
-      <li>
-        <p><b>Status: </b> {{ photo.rover.status }}</p>
-      </li>
-    </ul>
+    } @else {
+    <nd-spinner class="ml-[40px]"></nd-spinner>
+    }
   </div>
-  } @else {
-  <nd-spinner class="ml-[40px]"></nd-spinner>
-  }
+  <button class="arrow-button" (click)="handleSwitchSelectedPhoto(1)">
+    <fa-icon [icon]="_faChevronRight"></fa-icon>
+  </button>
 </mat-dialog-content>

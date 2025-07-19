@@ -70,7 +70,7 @@ export type NasaAPIMarsPhotosRequest = NasaAPIMarsPhotosBaseRequest & {
 };
 
 export interface NasaAPIMarsPhoto {
-  id: number;
+  id: string;
   sol: number;
   camera: Camera;
   img_src: string;

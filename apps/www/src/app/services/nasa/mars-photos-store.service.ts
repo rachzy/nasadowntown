@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { NasaService } from '../../api/nasa.service';
 import { BehaviorSubject, firstValueFrom, map } from 'rxjs';
 import {
@@ -32,12 +32,14 @@ export class MarsPhotosStoreService {
   );
 
   public readonly marsPhotos$ = this._marsPhotos.asObservable();
+  public readonly marsPhotos = computed(() => this._marsPhotos.getValue());
+
   public readonly manifests$ = this._manifests.asObservable();
   public readonly hasFetchedInitialData$ = this.manifests$.pipe(
     map((manifests) => Boolean(manifests))
   );
 
-  public readonly selectedPhotoID = signal<number | null>(null);
+  public readonly selectedPhotoID = signal<string | null>(null);
 
   constructor(private readonly _nasaService: NasaService) {
     this._marsPhotos.subscribe((photos) =>

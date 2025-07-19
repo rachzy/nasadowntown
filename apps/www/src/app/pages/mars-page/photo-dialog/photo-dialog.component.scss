@@ -1,4 +1,14 @@
 .container {
+  @apply flex justify-between w-full gap-4;
+  @apply overflow-hidden;
+
+  .arrow-button {
+    @apply text-white text-3xl;
+    @apply outline-none;
+  }
+}
+
+.content-container {
   @apply w-full h-full;
   @apply flex flex-wrap;
   @apply overflow-visible;
