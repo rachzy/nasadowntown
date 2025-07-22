@@ -53,14 +53,19 @@
       "defaultConfiguration": "development"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@angular/build:dev-server",
+      "options": {
+        "buildTarget": "www:build"
+      },
       "configurations": {
         "production": {
           "browserTarget": "www:build:production",
-          "buildTarget": "www:build:production"
+          "buildTarget": "www:build:production",
+          "hmr": false
         },
         "development": {
-          "buildTarget": "www:build:development"
+          "buildTarget": "www:build:development",
+          "hmr": true
         }
       },
       "defaultConfiguration": "development",
