@@ -2,6 +2,12 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "development": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s"
+    ],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -18,7 +24,7 @@
     "@angular-devkit/build-angular:application": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["development", "^development"]
     },
     "@nx/eslint:lint": {
       "cache": true,
@@ -114,6 +120,5 @@
     "@schematics/angular:resolver": {
       "typeSeparator": "."
     }
-  },
-  "nxCloudId": "6800419943dd81cddb0fb78e"
+  }
 }
