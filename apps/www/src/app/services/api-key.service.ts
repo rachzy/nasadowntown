@@ -9,7 +9,7 @@ import {
   shareReplay,
 } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
-import { ConfigService } from './config.service';
+import { ApiConfigService } from '../api/config.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,9 +17,9 @@ import { ConfigService } from './config.service';
 export class ApiKeyService {
   private readonly _apiKey = new BehaviorSubject<string | null>(null);
   private readonly _localStorageService = inject(LocalStorageService);
-  private readonly _configService = inject(ConfigService);
+  private readonly _apiConfigService = inject(ApiConfigService);
 
-  constructor(private readonly _httpClient: HttpClient) {
+  constructor() {
     this._initializeApiKey();
   }
 
@@ -32,22 +32,20 @@ export class ApiKeyService {
   }
 
   public fetchApiKey(): Observable<{ apiKey: string | null }> {
-    return this._httpClient
-      .get<{ apiKey: string }>(`${this._configService.apiUrl}/config/api-key`)
-      .pipe(
-        tap((response) => {
-          this._apiKey.next(response.apiKey);
-          this._localStorageService.setItem('NASA_API_KEY', response.apiKey);
-        }),
-        catchError((error) => {
-          console.error('Failed to fetch API key:', error);
+    return this._apiConfigService.fetchApiKey().pipe(
+      tap((response) => {
+        this._apiKey.next(response.apiKey);
+        this._localStorageService.setItem('NASA_API_KEY', response.apiKey);
+      }),
+      catchError((error) => {
+        console.error('Failed to fetch API key:', error);
 
-          this._localStorageService.removeItem('NASA_API_KEY');
-          this._apiKey.next(null);
-          return of({ apiKey: null });
-        }),
-        shareReplay(1)
-      );
+        this._localStorageService.removeItem('NASA_API_KEY');
+        this._apiKey.next(null);
+        return of({ apiKey: null });
+      }),
+      shareReplay(1)
+    );
   }
 
   private _initializeApiKey(): void {
