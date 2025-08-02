@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { NasaService } from '../../api/nasa.service';
+import { MarsPhotosAPIService } from '../../api/nasa-endpoints/mars-photos.service';
 import { BehaviorSubject, firstValueFrom, map } from 'rxjs';
 import {
   MarsRover,
@@ -18,6 +18,7 @@ import { ApiKeyService } from '../api-key.service';
   providedIn: 'root',
 })
 export class MarsPhotosStoreService {
+  private readonly _nasaService = inject(MarsPhotosAPIService);
   private readonly _localStorageService = inject(LocalStorageService);
   private readonly _apiKeyService = inject(ApiKeyService);
 
@@ -41,7 +42,7 @@ export class MarsPhotosStoreService {
 
   public readonly selectedPhotoID = signal<string | null>(null);
 
-  constructor(private readonly _nasaService: NasaService) {
+  constructor() {
     this._marsPhotos.subscribe((photos) =>
       this._localStorageService.setItem('marsPhotos', photos)
     );

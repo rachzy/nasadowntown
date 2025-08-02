@@ -1,25 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { NASA_MARS_ROUTE } from './api.routes';
-import { nasaAPIRequestBuilder } from '../utils/nasa-api';
+import { inject, Injectable } from '@angular/core';
+import { NASA_MARS_ROUTE } from '../api.routes';
+import { nasaAPIRequestBuilder } from '../../utils/nasa-api';
 import {
   MarsRover,
   NasaAPIMarsManifestResponse,
   NasaAPIMarsPhotosRequest,
   NasaAPIMarsPhotosResponse,
-} from '../interfaces/nasa-api/mars-photos';
+} from '../../interfaces/nasa-api/mars-photos';
 import { Observable } from 'rxjs';
 import { format } from 'date-fns';
-import { ApiKeyService } from '../services/api-key.service';
+import { ApiKeyService } from '../../services/api-key.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NasaService {
-  constructor(
-    private readonly _httpClient: HttpClient,
-    private readonly _apiKeyService: ApiKeyService
-  ) {}
+export class MarsPhotosAPIService {
+  private readonly _httpClient = inject(HttpClient);
+  private readonly _apiKeyService = inject(ApiKeyService);
 
   public getMarsPhotos(
     data: NasaAPIMarsPhotosRequest

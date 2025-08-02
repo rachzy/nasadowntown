@@ -1,0 +1,19 @@
+:host {
+  @apply flex flex-col justify-center items-center gap-12;
+  @apply w-full min-h-[100vh] px-4;
+}
+
+.title {
+  @apply my-3;
+  @apply text-9xl text-center;
+  @apply font-smooch font-light;
+
+  b {
+    @apply font-bold;
+  }
+}
+
+.subtitle {
+  @apply text-2xl text-center uppercase tracking-widest;
+  @apply font-ubuntu font-extralight;
+}

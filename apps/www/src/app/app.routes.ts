@@ -29,4 +29,13 @@ export const appRoutes: CustomRoute[] = [
       ),
     showInSidebar: true,
   },
+  {
+    path: 'asteroids',
+    title: 'Asteroids',
+    loadComponent: () =>
+      import('./pages/asteroids-page/asteroids-page.component').then(
+        (m) => m.AsteroidsPageComponent
+      ),
+    showInSidebar: true,
+  },
 ];

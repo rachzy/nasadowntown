@@ -8,6 +8,13 @@ import {
   providedIn: 'root',
 })
 export class LocalStorageService {
+  private readonly _keys: LocalStorageKey[] = [
+    'manifests',
+    'marsPhotos',
+    'previousPayloads',
+    'asteroids',
+    'asteroidsPagination',
+  ];
   public getItem<K extends LocalStorageKey>(
     key: K
   ): LocalStorageValueTypes[K] | null {
@@ -17,11 +24,7 @@ export class LocalStorageService {
     }
 
     // Only parse JSON for object/array values
-    if (
-      key === 'manifests' ||
-      key === 'marsPhotos' ||
-      key === 'previousPayloads'
-    ) {
+    if (this._keys.includes(key)) {
       try {
         return JSON.parse(item) as LocalStorageValueTypes[K];
       } catch {
@@ -42,11 +45,7 @@ export class LocalStorageService {
     }
 
     // Only stringify JSON for object/array values
-    if (
-      key === 'manifests' ||
-      key === 'marsPhotos' ||
-      key === 'previousPayloads'
-    ) {
+    if (this._keys.includes(key)) {
       localStorage.setItem(key, JSON.stringify(value));
     } else {
       localStorage.setItem(key, value as string);

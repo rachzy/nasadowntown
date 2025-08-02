@@ -1,0 +1,50 @@
+@use './common.scss';
+
+::ng-deep f-flow {
+  @include common.connection;
+
+  .f-background {
+    circle {
+      fill: rgba(255, 255, 255, 0.503);
+    }
+  }
+}
+
+.f-node {
+  @include common.node;
+  @apply flex items-center justify-center;
+
+  .pointer {
+    @apply w-[10px] h-[10px];
+    @apply bg-orange-500 rounded-full;
+  }
+
+  &.earth {
+    @apply bg-transparent p-0 border-none;
+
+    img {
+      @apply relative;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+  }
+
+  &.moon {
+    @apply w-[20px] h-[20px];
+    @apply bg-white rounded-full;
+  }
+
+  &.asteroid {
+    @apply w-[10px] h-[10px];
+    @apply bg-slate-400 rounded-full;
+  }
+}
+
+.space-graph {
+  @apply w-[1600px] h-[600px] max-w-full bg-black;
+  @apply border border-[#ffffff9a] rounded-lg;
+
+  f-canvas {
+    @apply w-full h-full;
+  }
+}

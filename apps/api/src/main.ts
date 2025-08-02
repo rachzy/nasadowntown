@@ -1,14 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { environment } from './environments/environment';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: ['https://nasadowntown-cb0fe.web.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  });
-  await app.listen(3000);
+
+  app.enableCors(environment.cors);
+
+  await app.listen(environment.port);
+  console.log(
+    `Application running on port ${environment.port} in ${
+      environment.production ? 'production' : 'development'
+    } mode`
+  );
 }
 bootstrap();

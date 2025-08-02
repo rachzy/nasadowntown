@@ -33,7 +33,6 @@ export class SidebarMenuComponent {
       if (!this.isMenuActive()) return;
       if (!(event.target instanceof HTMLElement)) return;
       const { id } = event.target;
-      console.log(id);
       if (id === this.menuButtonId) return;
       if (id === this.menuContainer.nativeElement.id) return;
       this.isMenuActive.set(false);

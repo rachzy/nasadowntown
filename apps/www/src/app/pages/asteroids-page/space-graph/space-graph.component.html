@@ -1,0 +1,41 @@
+<f-flow
+  fDraggable
+  class="space-graph galaxy-background"
+  (fLoaded)="onLoaded()"
+  #fFlowComponent
+>
+  <f-background>
+    <f-circle-pattern></f-circle-pattern>
+  </f-background>
+  <f-canvas fZoom #fCanvasComponent>
+    @for (connection of connections(); track connection.id) {
+    <f-connection
+      [fOutputId]="connection.from"
+      [fInputId]="connection.to"
+    ></f-connection>
+    } @for (node of nodes(); track node.connectorId) {
+    <div
+      fNode
+      [fNodePosition]="node.position"
+      [class.earth]="node.id === 'earth'"
+      [class.moon]="node.id === 'moon'"
+      [class.asteroid]="node.id === 'asteroid'"
+    >
+      <div
+        class="pointer"
+        fNodeInput
+        fNodeOutput
+        [fInputId]="node.connectorId"
+        [fOutputId]="node.connectorId"
+      ></div>
+      @if (node.id === 'earth') {
+      <img
+        [src]="`/images/${node.id}-8bit.png`"
+        draggable="false"
+        [alt]="node.id"
+      />
+      }
+    </div>
+    }
+  </f-canvas>
+</f-flow>

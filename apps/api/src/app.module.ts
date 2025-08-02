@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ConfigController } from './config.controller';
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
+import { NeowsModule } from './neows/neows.module';
+import { ConfigModule } from './config/config.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    NestConfigModule.forRoot({
       isGlobal: true,
     }),
+    NeowsModule,
+    ConfigModule,
   ],
-  controllers: [ConfigController],
+  controllers: [],
 })
 export class AppModule {}

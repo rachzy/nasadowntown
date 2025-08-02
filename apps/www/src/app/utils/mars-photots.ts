@@ -7,7 +7,6 @@ export const filterPhotosByPayload = (
   photos: NasaAPIMarsPhoto[],
   payload: NasaAPIMarsPhotosRequest
 ): NasaAPIMarsPhoto[] => {
-  console.log(payload);
   const { rover, camera, earthDate, sol } = payload;
   return photos.filter((photo) => {
     const isCameraMatch = camera

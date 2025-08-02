@@ -15,6 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@libs/shared": ["libs/shared/src/index.ts"],
+      "@libs/shared/*": ["libs/shared/src/*"],
       "@spartan-ng/ui-dialog-helm": ["libs/ui/ui-dialog-helm/src/index.ts"],
       "@spartan-ng/ui-icon-helm": ["libs/ui/ui-icon-helm/src/index.ts"]
     }

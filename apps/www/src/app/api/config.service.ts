@@ -9,11 +9,9 @@ import { Observable } from 'rxjs';
 export class ApiConfigService {
   private readonly _httpClient = inject(HttpClient);
 
-  private readonly _apiUrl = environment.apiUrl;
-
   public fetchApiKey(): Observable<{ apiKey: string }> {
     return this._httpClient.get<{ apiKey: string }>(
-      `${this._apiUrl}/config/api-key`
+      `${environment.apiUrl}/config/api-key`
     );
   }
 }
