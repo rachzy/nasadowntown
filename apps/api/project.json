@@ -20,14 +20,31 @@
           "optimization": true,
           "extractLicenses": true,
           "inspect": false
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": true
         }
-      }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "serve": {
       "executor": "@nx/js:node",
       "options": {
         "buildTarget": "api:build"
-      }
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "api:build:production"
+        },
+        "development": {
+          "buildTarget": "api:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
     }
   },
   "tags": []

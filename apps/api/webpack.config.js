@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = composePlugins(withNx(), (config, { options }) => {
   // Environment file replacement
   const isProduction =
-    options.optimization || process.env.NODE_ENV === 'production';
+    options.optimization === true || process.env.NODE_ENV === 'production';
 
   config.resolve.alias = {
     ...config.resolve.alias,

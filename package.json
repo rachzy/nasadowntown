@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "build:www": "nx build www",
+    "build:www:prod": "nx build www --configuration production",
     "build:api": "nx build api",
+    "build:api:prod": "nx build api --configuration production",
     "serve:www": "nx serve www",
     "serve:api": "nx serve api"
   },
