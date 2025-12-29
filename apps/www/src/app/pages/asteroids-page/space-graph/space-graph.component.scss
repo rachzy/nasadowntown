@@ -1,50 +1,99 @@
-@use './common.scss';
+.space-sandbox {
+  @apply relative w-full h-[600px] bg-gray-900 rounded-lg overflow-hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
 
-::ng-deep f-flow {
-  @include common.connection;
+.space-canvas {
+  @apply w-full h-full cursor-grab;
 
-  .f-background {
-    circle {
-      fill: rgba(255, 255, 255, 0.503);
-    }
+  &:active {
+    @apply cursor-grabbing;
   }
 }
 
-.f-node {
-  @include common.node;
+.control-panel {
+  @apply absolute top-4 right-4 z-10;
+}
+
+.zoom-controls {
+  @apply flex flex-col gap-2;
+}
+
+.control-btn {
+  @apply w-10 h-10 bg-gray-800 border border-gray-600 rounded-lg;
+  @apply text-white font-bold text-lg;
+  @apply hover:bg-gray-700 hover:border-gray-500;
+  @apply transition-all duration-200;
   @apply flex items-center justify-center;
 
-  .pointer {
-    @apply w-[10px] h-[10px];
-    @apply bg-orange-500 rounded-full;
+  &:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   }
 
-  &.earth {
-    @apply bg-transparent p-0 border-none;
-
-    img {
-      @apply relative;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-  }
-
-  &.moon {
-    @apply w-[20px] h-[20px];
-    @apply bg-white rounded-full;
-  }
-
-  &.asteroid {
-    @apply w-[10px] h-[10px];
-    @apply bg-slate-400 rounded-full;
+  &.reset {
+    @apply text-yellow-400;
   }
 }
 
-.space-graph {
-  @apply w-[1600px] h-[600px] max-w-full bg-black;
-  @apply border border-[#ffffff9a] rounded-lg;
+.info-panel {
+  @apply absolute top-4 left-4 z-10;
+  @apply bg-gray-800 bg-opacity-90 backdrop-blur-sm;
+  @apply border border-gray-600 rounded-lg p-4;
+  @apply text-white min-w-[250px];
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 
-  f-canvas {
-    @apply w-full h-full;
+  h3 {
+    @apply text-xl font-bold mb-2 text-yellow-400;
+  }
+
+  .body-type {
+    @apply text-sm text-blue-300 font-semibold mb-2 uppercase tracking-wider;
+  }
+
+  .description {
+    @apply text-sm text-gray-300 mb-3 leading-relaxed;
+  }
+
+  .coordinates {
+    @apply text-xs text-gray-400 font-mono;
+  }
+}
+
+.add-controls {
+  @apply absolute bottom-4 left-4 z-10;
+}
+
+.add-asteroid-btn {
+  @apply bg-blue-600 hover:bg-blue-700;
+  @apply text-white font-semibold px-4 py-2 rounded-lg;
+  @apply transition-all duration-200;
+  @apply border border-blue-500 hover:border-blue-400;
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .space-sandbox {
+    @apply h-[400px];
+  }
+
+  .info-panel {
+    @apply min-w-[200px] text-sm;
+
+    h3 {
+      @apply text-lg;
+    }
+  }
+
+  .control-btn {
+    @apply w-8 h-8 text-base;
+  }
+
+  .add-asteroid-btn {
+    @apply px-3 py-1 text-sm;
   }
 }

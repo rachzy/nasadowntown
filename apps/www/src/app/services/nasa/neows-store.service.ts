@@ -18,11 +18,10 @@ type OrbitCalculation = {
   heliocentricCoordinates: OrbitCalculationResult['position'];
 };
 
-type OrbitCalculationByAsteroid = {
-  [asteroidID: string]: {
-    [calculationDate: string]: OrbitCalculation;
-  };
-};
+type OrbitCalculationByAsteroid = Record<
+  string,
+  Record<string, OrbitCalculation>
+>;
 
 @Injectable({
   providedIn: 'root',
@@ -52,14 +51,15 @@ export class NeowsStoreService {
   );
 
   private readonly _orbitCalculations = signal<Array<OrbitCalculation>>([]);
-  public readonly orbitCalculationsByAsteroid =
-    computed<OrbitCalculationByAsteroid>(() => {
-      return this._orbitCalculations().reduce((acc, calculation) => {
-        acc[calculation.asteroidID] = acc[calculation.asteroidID] || {};
-        acc[calculation.asteroidID][calculation.calculationDate] = calculation;
-        return acc;
-      }, {} as OrbitCalculationByAsteroid);
-    });
+  public readonly orbitCalculationsByAsteroid = computed<
+    Record<string, Record<string, OrbitCalculation>>
+  >(() => {
+    return this._orbitCalculations().reduce((acc, calculation) => {
+      acc[calculation.asteroidID] = acc[calculation.asteroidID] || {};
+      acc[calculation.asteroidID][calculation.calculationDate] = calculation;
+      return acc;
+    }, {} as OrbitCalculationByAsteroid);
+  });
 
   public readonly selectedAsteroidID = signal<string | null>(null);
 
@@ -117,7 +117,8 @@ export class NeowsStoreService {
   }
 
   public async calculateOrbit(
-    asteroidID: string
+    asteroidID: string,
+    date: Date = new Date()
   ): Promise<OrbitCalculationResult> {
     const asteroid = this._asteroids
       .getValue()
@@ -147,7 +148,7 @@ export class NeowsStoreService {
         periphelion_argument: Number(perihelion_argument),
         ascending_node_longitude: Number(ascending_node_longitude),
         mean_motion: Number(mean_motion),
-        desired_date: getGregorianDateInStandardFormat(new Date()),
+        desired_date: getGregorianDateInStandardFormat(date),
         orbit_determination_date: getGregorianDateInStandardFormat(
           new Date(orbit_determination_date)
         ),
@@ -167,7 +168,8 @@ export class NeowsStoreService {
   }
 
   private async _fetchAsteroids(
-    data: NasaAPIAsteroidsRequest
+    data: NasaAPIAsteroidsRequest,
+    calculateOrbit = true
   ): Promise<Asteroid[]> {
     // Ensure we have the API key before making the request
     if (!this._apiKeyService.apiKey) {
@@ -189,6 +191,14 @@ export class NeowsStoreService {
       ...prev,
       { type: 'asteroids', payload: data },
     ]);
+
+    if (calculateOrbit) {
+      await Promise.all(
+        response.near_earth_objects.map((asteroid) =>
+          this.calculateOrbit(asteroid.id)
+        )
+      );
+    }
 
     return response.near_earth_objects;
   }
